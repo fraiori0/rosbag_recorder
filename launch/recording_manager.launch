@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="recorded_topics" />
+  <arg name="target_folder" default="$(find rosbag_recorder)/recordings/dump)" />
+  <arg name="filename_prefix" default="dump" />
+
+  <!-- Launch the tracker -->
+  <node name="recording_manager" pkg="rosbag_recorder" type="recording_manager.py" respawn="false" output="screen">
+    <rosparam param="recorded_topics" subst_value="True">$(arg recorded_topics)</rosparam>
+    <rosparam param="target_folder" subst_value="True">$(arg target_folder)</rosparam>
+    <rosparam param="filename_prefix" subst_value="True">$(arg filename_prefix)</rosparam>
+  </node>
+
+</launch>
