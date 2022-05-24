@@ -7,7 +7,7 @@ An example of a use case is having ROS running continuously during a session of 
 ## Usage
 
 To start the recording_node from the terminal, use the accompanying launch file. 
-The launch file take as arguments:
+The launch file takes as arguments:
 
 - a list of the topics to record;
 - the path to a folder in which to store the recordings;
