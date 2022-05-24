@@ -3,7 +3,6 @@
 import os
 from std_srvs.srv import Trigger, TriggerResponse
 import rospy
-# import roslaunch
 import subprocess
 
 
@@ -16,7 +15,7 @@ class Recorder:
         self.recorded_topics = list(recorded_topics)
 
         # name of rosbag node that will record, used to kill it
-        self.node_name = "recorder_bag_kill_me_please"
+        self.node_name = "recorder_bag_kill_me_plis"
 
         self.start_service = rospy.Service('start_recording', Trigger, self.start_recording)
         self.stop_service = rospy.Service('stop_recording', Trigger, self.stop_recording)
@@ -31,11 +30,15 @@ class Recorder:
             self.prefix + '_' + str(self.__i).zfill(3) + '.bag'
         )
 
-        # string of topics to be recorded
+        # String of topics to be recorded
         topics = ' '.join(topic for topic in self.recorded_topics)
-        # write to terminal to start rosbag recording
+
+        # Command to write to terminal to start rosbag recording
         cmd = f"rosbag record --buffsize=0 --output-name={path_to_bag} --publish --lz4 {topics}  __name:={self.node_name}"
 
+        # Start a subprocess and give the command
+        # NOTE: subprocess is used so that the node does not get stuck into this Service call
+        # waiting for the recording to finish
         self.p = subprocess.Popen(cmd, shell=True,close_fds=True)
             #  stdin=None, stdout=None, stderr=None, close_fds=True)
 
@@ -47,12 +50,13 @@ class Recorder:
         if not self.recording:
             return TriggerResponse(success=False, message='Already not recording')
 
-        # cleanup
+        # update internal variables
         self.recording = False
         self.__i += 1
 
         # kill the node
         os.system(f"rosnode kill /{self.node_name}")
+        # and then kill the process
         self.p.terminate()
 
         return TriggerResponse(success=True, message='Stopped recording')
