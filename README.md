@@ -18,3 +18,7 @@ Example:
 ```console
 roslaunch rosbag_recorder recording_manager.launch recorded_topics:="['topic1', 'topic2']" target_folder:=$(rospack find rosbag_recorder)/recordings/dump/ filename_prefix:='name_of_today_session'
 ```
+
+## To Do
+
+1. Implement the use of a YAML file as an alternative way to list the parameters for the node
