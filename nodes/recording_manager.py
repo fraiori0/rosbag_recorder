@@ -1,4 +1,4 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 
 import os
 from std_srvs.srv import Trigger, TriggerResponse
@@ -17,10 +17,11 @@ class Recorder:
         # name of rosbag node that will record, used to kill it
         self.node_name = "recorder_bag_kill_me_plis"
 
-        self.start_service = rospy.Service('start_recording', Trigger, self.start_recording)
-        self.stop_service = rospy.Service('stop_recording', Trigger, self.stop_recording)
+        self.start_service = rospy.Service(
+            'recording_manager/start_recording', Trigger, self.start_recording)
+        self.stop_service = rospy.Service(
+            'recording_manager/stop_recording', Trigger, self.stop_recording)
 
-    
     def start_recording(self, trigger_request):
         if self.recording:
             return TriggerResponse(success=False, message='Already recording')
@@ -39,10 +40,10 @@ class Recorder:
         # Start a subprocess and give the command
         # NOTE: subprocess is used so that the node does not get stuck into this Service call
         # waiting for the recording to finish
-        self.p = subprocess.Popen(cmd, shell=True,close_fds=True)
-            #  stdin=None, stdout=None, stderr=None, close_fds=True)
+        self.p = subprocess.Popen(cmd, shell=True, close_fds=True)
+        #  stdin=None, stdout=None, stderr=None, close_fds=True)
 
-        self.recording=True
+        self.recording = True
         print("eheheheh")
         return TriggerResponse(success=True, message='Started recording')
 
@@ -71,7 +72,7 @@ if __name__ == '__main__':
         recorded_topics = rospy.get_param('~recorded_topics')
         target_folder = rospy.get_param('~target_folder')
         filename_prefix = rospy.get_param('~filename_prefix', default='dump')
-        
+
         r = Recorder(target_folder, filename_prefix, recorded_topics)
 
     except rospy.ROSInterruptException:
