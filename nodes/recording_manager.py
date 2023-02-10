@@ -44,7 +44,6 @@ class Recorder:
         #  stdin=None, stdout=None, stderr=None, close_fds=True)
 
         self.recording = True
-        print("eheheheh")
         return TriggerResponse(success=True, message='Started recording')
 
     def stop_recording(self, trigger_request):
