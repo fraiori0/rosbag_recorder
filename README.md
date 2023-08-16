@@ -19,6 +19,12 @@ Example:
 roslaunch rosbag_recorder recording_manager.launch recorded_topics:="['topic1', 'topic2']" target_folder:=$(rospack find rosbag_recorder)/recordings/dump/ filename_prefix:='name_of_today_session'
 ```
 
+## Important Notes
+
+The recorder DOES NOT CHECK whether the listed topics are correct. 
+This choice has been made as some topics that are meant to be recorded may not have been published yet (e.g. they may be published later a s a result of some part of the experiment).
+As such, there is not a straightforward way to know whether a topic has been mispelled or just not published yet.
+
 ## To Do
 
 1. Implement the use of a YAML file as an alternative way to list the parameters for the node
